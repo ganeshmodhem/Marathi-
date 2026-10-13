@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ganesh Modhe Typing</title>
+<style>
+:root{--blue:#2457d6;--bg:#f3f6fb;--ink:#172033;--muted:#667085;--line:#d8deea}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,"Noto Sans Devanagari",sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(135deg,#173f9e,#3478f6);color:#fff;padding:22px 16px;text-align:center}
+header h1{font-size:clamp(22px,4vw,32px);margin:0 0 8px}
+header p{margin:0;font-size:14px;opacity:.92}
+main{max-width:1200px;margin:18px auto;padding:0 14px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:12px}
+.status{font-size:13px;color:var(--muted);min-height:18px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+button{border:0;border-radius:10px;padding:10px 14px;background:var(--blue);color:#fff;font-weight:700;cursor:pointer}
+button.secondary{background:#e6ebf5;color:#26334d}
+button:disabled{opacity:.55;cursor:wait}
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 5px 18px #14264b0a;display:flex;flex-direction:column;min-height:390px}
+.panel-head{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.panel-head h2{font-size:17px;margin:0}
+.pill{font-size:12px;background:#eaf0ff;color:#244fbd;padding:5px 9px;border-radius:99px}
+textarea{width:100%;flex:1;resize:vertical;min-height:300px;border:0;outline:0;padding:18px;font:18px/1.65 Arial,"Noto Sans Devanagari",sans-serif;color:var(--ink);background:#fff}
+textarea::placeholder{color:#9aa3b2}
+.panel-foot{padding:10px 14px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:12px}
+.note{margin:14px 2px;color:var(--muted);font-size:13px;line-height:1.6}
+@media(min-width:1000px){
+  main{max-width:1500px;margin:24px auto;padding:0 24px}
+  .panels{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:stretch}
+  .panel{min-height:68vh}
+  .panel textarea{min-height:52vh;font-size:20px}
+  .panel-head{padding:18px 22px}
+  .panel-head h2{font-size:20px}
+  .toolbar{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 0}
+}
+@media(min-width:701px) and (max-width:999px){
+  .panels{grid-template-columns:1fr 1fr}
+  .panel{min-height:480px}
+  .panel textarea{min-height:360px}
+}
+@media(max-width:700px){.panels{grid-template-columns:1fr}.panel{min-height:300px}.panel textarea{min-height:210px}.toolbar{align-items:flex-start}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Ganesh Modhe Typing</h1>
+  <p>Marathi to English Live Typing · मराठीत टाइप करा, इंग्रजी भाषांतर बाजूला पाहा.</p>
+</header>
+<main>
+  <div class="toolbar">
+    <div>
+      <strong>Live Translation</strong>
+      <div class="status" id="status" aria-live="polite">भाषांतर सुरू करण्यासाठी मराठीत टाइप करा.</div>
+    </div>
+    <div class="actions">
+      <button class="secondary" id="clearBtn">Clear / पुसून टाका</button>
+      <button class="secondary" id="downloadBtn">Download TXT</button>
+      <button id="copyBtn">Copy English</button>
+    </div>
+  </div>
+  <section class="panels">
+    <div class="panel">
+      <div class="panel-head"><h2>मराठी (Marathi)</h2><span class="pill">Type here</span></div>
+      <textarea id="source" lang="mr" placeholder="इथे मराठीत टाइप करा...&#10;&#10;उदा. मला उद्या बँकेत जायचे आहे." spellcheck="true"></textarea>
+      <div class="panel-foot"><span>Input · मराठी</span><span id="sourceCount">0 characters</span></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h2>English Translation</h2><span class="pill">Auto translate</span></div>
+      <textarea id="target" lang="en" placeholder="English translation will appear here..." readonly></textarea>
+      <div class="panel-foot"><span>Output · English</span><span id="targetCount">0 characters</span></div>
+    </div>
+  </section>
+  <div class="note" style="background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px">
+    <strong>Typing mode:</strong> तुम्ही <em>Mi ghari jayche aahe</em> अशा इंग्रजी अक्षरांत मराठी टाइप करत असाल, तर ते Roman Marathi आहे. हे अॅप आता अशा मजकुरासाठी वेगळी भाषांतर सेवा वापरून पाहील.
+  </div>
+  <p class="note"><strong>टीप:</strong> भाषांतरासाठी इंटरनेट आवश्यक आहे. मजकूर टाइप केल्यानंतर थोड्या वेळात भाषांतर आपोआप अपडेट होईल. भाषांतर सेवा उपलब्ध नसल्यास किंवा इंटरनेट बंद असल्यास त्रुटी संदेश दिसेल. संवेदनशील किंवा गोपनीय माहिती बाह्य भाषांतर सेवेकडे पाठवू नका.</p>
+</main>
+<script>
+const source = document.getElementById('source');
+const target = document.getElementById('target');
+const statusEl = document.getElementById('status');
+const sourceCount = document.getElementById('sourceCount');
+const targetCount = document.getElementById('targetCount');
+const clearBtn = document.getElementById('clearBtn');
+const copyBtn = document.getElementById('copyBtn');
+const downloadBtn = document.getElementById('downloadBtn');
+let timer = null;
+let requestId = 0;
+function counts(){
+  sourceCount.textContent = source.value.length + ' characters';
+  targetCount.textContent = target.value.length + ' characters';
+}
+async function translate(){
+  const text = source.value.trim();
+  const thisRequest = ++requestId;
+  counts();
+  if(!text){target.value='';counts();statusEl.textContent='मराठी किंवा Roman Marathi टाइप करा.';return;}
+  statusEl.textContent='भाषांतर होत आहे…';
+  const isDevanagari = /[\u0900-\u097F]/.test(text);
+  // Common Roman-Marathi phrases work offline, even if translation services are blocked.
+  const key = text.toLowerCase().replace(/[.,!?;]+/g,'').replace(/\s+/g,' ').trim();
+  const common = {
+    'mala office la jaycha aahe':'I have to go to the office.',
+    'mala office la jayche aahe':'I have to go to the office.',
+    'mala ghari jayche aahe':'I want to go home.',
+    'mi ghari jayche aahe':'I want to go home.',
+    'mi ghari chalo':'Let’s go home.',
+    'mi ghari chalob':'Let’s go home.',
+    'mala ghari jaycha aahe':'I want to go home.',
+    'tumhi kase aahat':'How are you?',
+    'tu kasa aahes':'How are you?',
+    'mi thik aahe':'I am fine.',
+    'mala samajle':'I understood.',
+    'mala samajale nahi':'I did not understand.',
+    'udya bhetu':'See you tomorrow.',
+    'dhanyawad':'Thank you.',
+    'namaskar':'Hello.',
+    'mala pani pahije':'I need water.',
+    'mi yet aahe':'I am coming.',
+    'mi yeto':'I am coming.',
+    'mi kaam karto':'I work.',
+    'mala madat kara':'Please help me.'
+  };
+  if(!isDevanagari && common[key]){
+    target.value=common[key];counts();statusEl.textContent='भाषांतर पूर्ण झाले.';return;
+  }
+  try{
+    let marathiText = text;
+    if(!isDevanagari){
+      // Convert Latin-typed Marathi into Devanagari using Google's transliteration endpoint.
+      const transUrl='https://inputtools.google.com/request?text='+encodeURIComponent(text.slice(0,1000))+'&itc=mr-t-i0-und&num=1&cp=0&cs=1&ie=utf-8&oe=utf-8';
+      const tr=await fetch(transUrl);
+      if(tr.ok){
+        const td=await tr.json();
+        if(td && td[0]==='SUCCESS' && td[1] && td[1][0] && td[1][0][1] && td[1][0][1][0]) marathiText=td[1][0][1][0];
+      }
+    }
+    if(thisRequest!==requestId)return;
+    const url='https://translate.googleapis.com/translate_a/single?client=gtx&sl=mr&tl=en&dt=t&q='+encodeURIComponent(marathiText.slice(0,4500));
+    const response=await fetch(url);
+    if(!response.ok)throw new Error('service');
+    const data=await response.json();
+    const translated=Array.isArray(data[0])?data[0].map(part=>part[0]||'').join(''):'';
+    if(thisRequest!==requestId)return;
+    if(!translated || (!isDevanagari && translated.toLowerCase()===text.toLowerCase()))throw new Error('no translation');
+    target.value=decodeHtml(translated);counts();statusEl.textContent='भाषांतर पूर्ण झाले.';
+  }catch(e){
+    if(thisRequest!==requestId)return;
+    target.value='';
+    counts();
+    statusEl.textContent='सेवा/इंटरनेटमुळे भाषांतर झाले नाही. खालील सामान्य वाक्ये ऑफलाइन चालतात; इतर वाक्यांसाठी इंटरनेट आणि Chrome आवश्यक आहे.';
+  }
+}
+function decodeHtml(value){
+  const el=document.createElement('textarea'); el.innerHTML=value; return el.value;
+}
+source.addEventListener('input',()=>{
+  counts();
+  clearTimeout(timer);
+  statusEl.textContent=source.value.trim()?'टाइपिंग थांबल्यावर भाषांतर होईल…':'भाषांतर सुरू करण्यासाठी मराठीत टाइप करा.';
+  timer=setTimeout(translate,650);
+});
+clearBtn.addEventListener('click',()=>{
+  clearTimeout(timer); requestId++; source.value=''; target.value=''; counts();
+  statusEl.textContent='मजकूर पुसला आहे.';
+  source.focus();
+});
+downloadBtn.addEventListener('click',()=>{
+  if(!target.value){statusEl.textContent='डाउनलोड करण्यासाठी इंग्रजी भाषांतर उपलब्ध नाही.';return;}
+  const blob = new Blob([target.value], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'English_Translation.txt'; a.click();
+  URL.revokeObjectURL(url);
+  statusEl.textContent='English translation text file downloaded.';
+});
+copyBtn.addEventListener('click',async()=>{
+  if(!target.value){statusEl.textContent='कॉपी करण्यासाठी इंग्रजी भाषांतर उपलब्ध नाही.';return;}
+  try{
+    await navigator.clipboard.writeText(target.value);
+    statusEl.textContent='English translation copied.';
+  }catch(e){
+    target.focus();target.select();
+    try{document.execCommand('copy');statusEl.textContent='English translation copied.';}
+    catch(_){statusEl.textContent='मजकूर निवडला आहे. Copy वापरा.';}
+  }
+});
+counts();
+</script>
+</body>
+</html>
